@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Digital Clock</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: transparent;
+        font-family: "Segoe UI", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .clock {
+        padding: 20px 32px;
+        border-radius: 22px;
+        background: rgba(20, 20, 25, 0.92);
+        color: white;
+        text-align: center;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+    }
+
+    #time {
+        font-size: 48px;
+        font-weight: 600;
+        letter-spacing: 3px;
+    }
+
+    #date {
+        margin-top: 6px;
+        font-size: 14px;
+        opacity: 0.65;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="clock">
+    <div id="time">00:00:00</div>
+    <div id="date">Loading...</div>
+</div>
+
+<script>
+function updateClock() {
+    const now = new Date();
+
+    document.getElementById("time").textContent =
+        now.toLocaleTimeString("en-IN", {
+            hour12: false
+        });
+
+    document.getElementById("date").textContent =
+        now.toLocaleDateString("en-IN", {
+            weekday: "long",
+            day: "numeric",
+            month: "long"
+        });
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>
