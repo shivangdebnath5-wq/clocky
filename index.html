@@ -1,73 +1,1264 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Digital Clock</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Today Widget</title>
 
 <style>
-    * {
-        box-sizing: border-box;
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        sans-serif;
+
+    color: #fff;
+
+    background: transparent;
+
+    padding: 18px;
+}
+
+
+/* =========================================================
+   MAIN WIDGET
+========================================================= */
+
+.widget {
+    position: relative;
+
+    width: 100%;
+    max-width: 850px;
+    min-height: 300px;
+
+    margin: auto;
+
+    padding: 30px;
+
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18, 31, 54, 0.92),
+            rgba(7, 16, 31, 0.94)
+        );
+
+    border: 1px solid rgba(255,255,255,0.10);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.30),
+        inset 0 1px 0 rgba(255,255,255,0.07);
+
+    backdrop-filter: blur(30px) saturate(130%);
+    -webkit-backdrop-filter: blur(30px) saturate(130%);
+}
+
+
+/* =========================================================
+   AMBIENT GLOWS
+========================================================= */
+
+.widget::before {
+    content: "";
+
+    position: absolute;
+
+    width: 360px;
+    height: 360px;
+
+    top: -180px;
+    left: -100px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(92,126,226,0.28),
+            transparent 68%
+        );
+
+    pointer-events: none;
+}
+
+
+.widget::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    right: -120px;
+    bottom: -160px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(58,89,160,0.20),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content {
+    position: relative;
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(260px, 1fr)
+        minmax(240px, 0.85fr);
+
+    gap: 40px;
+}
+
+
+/* =========================================================
+   PLUS BUTTON
+========================================================= */
+
+.add-button {
+    position: absolute;
+
+    z-index: 10;
+
+    top: 20px;
+    right: 20px;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,0.11);
+
+    background:
+        rgba(255,255,255,0.075);
+
+    color: rgba(255,255,255,0.82);
+
+    font-size: 22px;
+    font-weight: 300;
+
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,0.18);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.add-button:hover {
+    transform: scale(1.07);
+
+    background:
+        rgba(255,255,255,0.12);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.25);
+}
+
+.add-button:active {
+    transform: scale(0.92);
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+.clock-area {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    min-height: 240px;
+}
+
+
+.label {
+    font-size: 11px;
+
+    font-weight: 650;
+
+    letter-spacing: 0.16em;
+
+    text-transform: uppercase;
+
+    color:
+        rgba(255,255,255,0.38);
+
+    margin-bottom: 11px;
+}
+
+
+.date {
+    font-size: 17px;
+
+    color:
+        rgba(255,255,255,0.58);
+
+    margin-bottom: 10px;
+
+    letter-spacing:
+        -0.015em;
+}
+
+
+.time {
+    font-size:
+        clamp(58px, 8vw, 88px);
+
+    line-height:
+        0.9;
+
+    font-weight:
+        500;
+
+    letter-spacing:
+        -0.065em;
+
+    color: white;
+
+    text-shadow:
+        0 10px 35px rgba(0,0,0,0.18);
+}
+
+
+.greeting {
+    margin-top: 16px;
+
+    font-size: 16px;
+
+    color:
+        rgba(255,255,255,0.42);
+}
+
+
+/* =========================================================
+   TASK PANEL
+========================================================= */
+
+.tasks-area {
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    padding-top: 9px;
+}
+
+
+.tasks-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+}
+
+
+.tasks-title {
+    font-size: 18px;
+
+    font-weight: 600;
+
+    letter-spacing:
+        -0.025em;
+
+    color:
+        rgba(255,255,255,0.91);
+}
+
+
+.task-count {
+    font-size: 11px;
+
+    color:
+        rgba(255,255,255,0.34);
+}
+
+
+/* =========================================================
+   ADD TASK PANEL
+========================================================= */
+
+.add-task {
+    display: flex;
+
+    gap: 7px;
+
+    padding: 5px;
+
+    margin-bottom: 11px;
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,0.055);
+
+    border:
+        1px solid rgba(255,255,255,0.075);
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+
+    opacity: 0;
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    transform: translateY(-5px);
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.22s ease,
+        max-height 0.25s ease,
+        transform 0.22s ease;
+}
+
+
+.add-task.visible {
+    opacity: 1;
+
+    max-height: 60px;
+
+    transform:
+        translateY(0);
+
+    pointer-events: auto;
+}
+
+
+.add-task input {
+    flex: 1;
+
+    min-width: 0;
+
+    border: none;
+
+    outline: none;
+
+    background:
+        transparent;
+
+    color: white;
+
+    font-family:
+        inherit;
+
+    font-size: 13px;
+
+    padding:
+        8px 10px;
+}
+
+
+.add-task input::placeholder {
+    color:
+        rgba(255,255,255,0.28);
+}
+
+
+.add-task button {
+    width: 31px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #7892e8,
+            #526fce
+        );
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    transition:
+        transform 0.18s ease;
+}
+
+
+.add-task button:hover {
+    transform:
+        scale(1.05);
+}
+
+
+/* =========================================================
+   TASK LIST
+========================================================= */
+
+.task-list {
+    overflow-y: auto;
+
+    max-height: 220px;
+
+    padding-right: 3px;
+}
+
+
+.task-list::-webkit-scrollbar {
+    width: 3px;
+}
+
+.task-list::-webkit-scrollbar-thumb {
+    background:
+        rgba(255,255,255,0.15);
+
+    border-radius: 10px;
+}
+
+
+.task {
+    display: flex;
+
+    align-items: center;
+
+    padding: 10px 11px;
+
+    margin-bottom: 6px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,0.045);
+
+    border:
+        1px solid rgba(255,255,255,0.045);
+
+    animation:
+        taskIn 0.25s ease;
+
+    transition:
+        background 0.2s ease,
+        opacity 0.25s ease,
+        transform 0.2s ease;
+}
+
+
+.task:hover {
+    background:
+        rgba(255,255,255,0.065);
+
+    transform:
+        translateX(1px);
+}
+
+
+@keyframes taskIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
     }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   CHECKBOX
+========================================================= */
+
+.checkbox {
+    width: 19px;
+    height: 19px;
+
+    flex-shrink: 0;
+
+    margin-right: 10px;
+
+    border-radius: 50%;
+
+    border:
+        1.4px solid
+        rgba(255,255,255,0.28);
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        transform 0.18s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.checkbox:hover {
+    transform:
+        scale(1.08);
+
+    border-color:
+        rgba(255,255,255,0.55);
+}
+
+
+.checkbox.checked {
+    background:
+        linear-gradient(
+            145deg,
+            #8199ed,
+            #526fd0
+        );
+
+    border-color:
+        transparent;
+
+    box-shadow:
+        0 3px 12px
+        rgba(76,102,197,0.30);
+}
+
+
+.checkbox.checked::after {
+    content:
+        "✓";
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   TASK TEXT
+========================================================= */
+
+.task-text {
+    flex: 1;
+
+    min-width: 0;
+
+    font-size: 13px;
+
+    color:
+        rgba(255,255,255,0.78);
+
+    overflow-wrap:
+        anywhere;
+
+    transition:
+        color 0.2s ease;
+}
+
+
+.task.completed {
+    opacity:
+        0.45;
+}
+
+
+.task.completed
+.task-text {
+    text-decoration:
+        line-through;
+
+    color:
+        rgba(255,255,255,0.32);
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+.delete {
+    width: 24px;
+
+    height: 24px;
+
+    border: none;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255,255,255,0.18);
+
+    cursor:
+        pointer;
+
+    font-size:
+        17px;
+
+    border-radius:
+        7px;
+
+    transition:
+        color 0.18s ease,
+        background 0.18s ease;
+}
+
+
+.delete:hover {
+    color:
+        rgba(255,255,255,0.65);
+
+    background:
+        rgba(255,255,255,0.06);
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty {
+    padding:
+        28px 10px;
+
+    text-align:
+        center;
+
+    font-size:
+        12px;
+
+    color:
+        rgba(255,255,255,0.25);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 650px) {
 
     body {
-        margin: 0;
-        background: transparent;
-        font-family: "Segoe UI", sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        padding: 10px;
     }
 
-    .clock {
-        padding: 20px 32px;
-        border-radius: 22px;
-        background: rgba(20, 20, 25, 0.92);
-        color: white;
-        text-align: center;
-        box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+    .widget {
+        padding: 25px 22px;
+
+        border-radius:
+            25px;
     }
 
-    #time {
-        font-size: 48px;
-        font-weight: 600;
-        letter-spacing: 3px;
+    .content {
+        grid-template-columns:
+            1fr;
+
+        gap: 25px;
     }
 
-    #date {
-        margin-top: 6px;
-        font-size: 14px;
-        opacity: 0.65;
+    .clock-area {
+        min-height:
+            190px;
     }
+
+    .tasks-area {
+        padding-top:
+            0;
+    }
+
+    .time {
+        font-size:
+            62px;
+    }
+
+    .task-list {
+        max-height:
+            200px;
+    }
+}
+
 </style>
 </head>
 
+
 <body>
 
-<div class="clock">
-    <div id="time">00:00:00</div>
-    <div id="date">Loading...</div>
+<div class="widget">
+
+    <!-- PLUS -->
+
+    <button
+        class="add-button"
+        id="openAdd"
+        aria-label="Add task">
+        +
+    </button>
+
+
+    <div class="content">
+
+        <!-- CLOCK -->
+
+        <div class="clock-area">
+
+            <div class="label">
+                Today
+            </div>
+
+            <div
+                class="date"
+                id="date">
+            </div>
+
+            <div
+                class="time"
+                id="time">
+            </div>
+
+            <div
+                class="greeting"
+                id="greeting">
+            </div>
+
+        </div>
+
+
+        <!-- TASKS -->
+
+        <div class="tasks-area">
+
+            <div class="tasks-header">
+
+                <div class="tasks-title">
+                    Tasks
+                </div>
+
+                <div
+                    class="task-count"
+                    id="taskCount">
+                    Nothing planned
+                </div>
+
+            </div>
+
+
+            <!-- HIDDEN ADD BAR -->
+
+            <div
+                class="add-task"
+                id="addTask">
+
+                <input
+                    id="taskInput"
+                    type="text"
+                    placeholder="What needs to be done?"
+                    maxlength="200"
+                    autocomplete="off"
+                >
+
+                <button
+                    id="addTaskButton">
+                    +
+                </button>
+
+            </div>
+
+
+            <!-- TASKS -->
+
+            <div
+                class="task-list"
+                id="taskList">
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
+
 <script>
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
 function updateClock() {
-    const now = new Date();
 
-    document.getElementById("time").textContent =
-        now.toLocaleTimeString("en-IN", {
-            hour12: false
-        });
+    const now =
+        new Date();
 
-    document.getElementById("date").textContent =
-        now.toLocaleDateString("en-IN", {
-            weekday: "long",
-            day: "numeric",
-            month: "long"
-        });
+
+    const date =
+        now.toLocaleDateString(
+            "en-IN",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long"
+            }
+        );
+
+
+    const time =
+        now.toLocaleTimeString(
+            "en-IN",
+            {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true
+            }
+        );
+
+
+    const hour =
+        now.getHours();
+
+
+    let greeting;
+
+
+    if (hour >= 5 && hour < 12) {
+
+        greeting =
+            "Good morning.";
+
+    }
+
+    else if (hour >= 12 && hour < 17) {
+
+        greeting =
+            "Good afternoon.";
+
+    }
+
+    else if (hour >= 17 && hour < 21) {
+
+        greeting =
+            "Good evening.";
+
+    }
+
+    else {
+
+        greeting =
+            "Good night.";
+
+    }
+
+
+    document
+        .getElementById("date")
+        .textContent = date;
+
+
+    document
+        .getElementById("time")
+        .textContent = time;
+
+
+    document
+        .getElementById("greeting")
+        .textContent = greeting;
 }
 
+
 updateClock();
-setInterval(updateClock, 1000);
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/* =========================================================
+   TASK DATA
+========================================================= */
+
+let tasks =
+    JSON.parse(
+        localStorage.getItem(
+            "todayWidgetTasks"
+        ) || "[]"
+    );
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const openAdd =
+    document.getElementById(
+        "openAdd"
+    );
+
+const addTask =
+    document.getElementById(
+        "addTask"
+    );
+
+const input =
+    document.getElementById(
+        "taskInput"
+    );
+
+
+/* =========================================================
+   OPEN ADD
+========================================================= */
+
+openAdd.addEventListener(
+    "click",
+    () => {
+
+        addTask.classList.toggle(
+            "visible"
+        );
+
+
+        if (
+            addTask.classList.contains(
+                "visible"
+            )
+        ) {
+
+            setTimeout(
+                () => input.focus(),
+                100
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ADD
+========================================================= */
+
+function createTask() {
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) {
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    tasks.push({
+
+        id: Date.now(),
+
+        text: text,
+
+        completed: false
+
+    });
+
+
+    saveTasks();
+
+    input.value = "";
+
+    renderTasks();
+
+    input.focus();
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+document
+    .getElementById(
+        "addTaskButton"
+    )
+    .addEventListener(
+        "click",
+        createTask
+    );
+
+
+/* =========================================================
+   ENTER
+========================================================= */
+
+input.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            event.preventDefault();
+
+            createTask();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TOGGLE
+========================================================= */
+
+function toggleTask(id) {
+
+    tasks =
+        tasks.map(
+            task => {
+
+                if (
+                    task.id === id
+                ) {
+
+                    return {
+                        ...task,
+                        completed:
+                            !task.completed
+                    };
+
+                }
+
+                return task;
+
+            }
+        );
+
+
+    saveTasks();
+
+    renderTasks();
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteTask(id) {
+
+    tasks =
+        tasks.filter(
+            task =>
+                task.id !== id
+        );
+
+
+    saveTasks();
+
+    renderTasks();
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+function saveTasks() {
+
+    localStorage.setItem(
+        "todayWidgetTasks",
+        JSON.stringify(tasks)
+    );
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderTasks() {
+
+    const list =
+        document.getElementById(
+            "taskList"
+        );
+
+    const count =
+        document.getElementById(
+            "taskCount"
+        );
+
+
+    list.innerHTML = "";
+
+
+    if (
+        tasks.length === 0
+    ) {
+
+        list.innerHTML = `
+            <div class="empty">
+                Nothing planned yet.
+            </div>
+        `;
+
+        count.textContent =
+            "Nothing planned";
+
+        return;
+
+    }
+
+
+    tasks.forEach(
+        task => {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "task" +
+                (
+                    task.completed
+                        ? " completed"
+                        : ""
+                );
+
+
+            element.innerHTML = `
+
+                <div
+                    class="checkbox ${
+                        task.completed
+                            ? "checked"
+                            : ""
+                    }"
+                    onclick="
+                        toggleTask(${task.id})
+                    ">
+                </div>
+
+                <div
+                    class="task-text">
+                    ${escapeHTML(task.text)}
+                </div>
+
+                <button
+                    class="delete"
+                    onclick="
+                        deleteTask(${task.id})
+                    "
+                    aria-label="Delete task">
+                    ×
+                </button>
+
+            `;
+
+
+            list.appendChild(
+                element
+            );
+
+        }
+    );
+
+
+    const completed =
+        tasks.filter(
+            task =>
+                task.completed
+        ).length;
+
+
+    count.textContent =
+        `${completed}/${tasks.length} done`;
+}
+
+
+/* =========================================================
+   SAFE TEXT
+========================================================= */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+}
+
+
+/* =========================================================
+   INITIAL
+========================================================= */
+
+renderTasks();
+
 </script>
 
 </body>
